@@ -163,7 +163,7 @@ const EditProfile = () => {
     async function saveData() {
       try {
         const res = await axiosInstance.patch(
-          import.meta.env.VITE_DOMAIN + `/api/profile/${userData._id}`,
+           `/api/profile/${userData._id}`,
           { firstName, lastName, bio },
           { withCredentials: true }
         )

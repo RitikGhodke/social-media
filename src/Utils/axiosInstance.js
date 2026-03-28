@@ -1,18 +1,16 @@
 import axios from "axios";
 
-const API = import.meta.env.VITE_DOMAIN;
-
 const axiosInstance = axios.create({
-  baseURL: API
+  baseURL: import.meta.env.VITE_DOMAIN,
+  withCredentials: true,
 });
 
+// 🔥 TOKEN AUTO SEND
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-
   return config;
 });
 

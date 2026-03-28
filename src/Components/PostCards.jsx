@@ -264,7 +264,7 @@ const PostCard = ({ post }) => {
 
     async function like()
     {
-      const likeRes = axiosInstance.patch(import.meta.env.VITE_DOMAIN +  `/api/posts/${post._id}/like`, {}, {withCredentials : true})
+      const likeRes = axiosInstance.patch( `/api/posts/${post._id}/like`, {}, {withCredentials : true})
       console.log(likeRes)
       setLiked(prev => !prev)
       setLikesCount((prev) => (prev + 1))
@@ -272,7 +272,7 @@ const PostCard = ({ post }) => {
     }
 
     async function unlike() {
-      const unlikeRes = axiosInstance.patch(import.meta.env.VITE_DOMAIN + `/api/posts/${post._id}/unlike`, {}, {withCredentials : true})
+      const unlikeRes = axiosInstance.patch( `/api/posts/${post._id}/unlike`, {}, {withCredentials : true})
       console.log(unlikeRes)
       setLiked(prev => !prev)
       setLikesCount((prev) => (prev - 1))
@@ -297,13 +297,13 @@ const PostCard = ({ post }) => {
     // TODO: API call to toggle comment like
     async function likeComment()
     {
-      const res = await axiosInstance.post(import.meta.env.VITE_DOMAIN + `/api/comments/${post._id}/${commentId}/like`, {}, {withCredentials : true})
+      const res = await axiosInstance.post( `/api/comments/${post._id}/${commentId}/like`, {}, {withCredentials : true})
       console.log(res)
     }
 
     async function unlikeComment()
     {
-      const res = await axiosInstance.patch(import.meta.env.VITE_DOMAIN + `/api/comments/${post._id}/${commentId}/unlike`, {}, {withCredentials : true})
+      const res = await axiosInstance.patch( `/api/comments/${post._id}/${commentId}/unlike`, {}, {withCredentials : true})
       console.log(res)
     }
 

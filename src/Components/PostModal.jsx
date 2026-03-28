@@ -33,7 +33,7 @@ const PostModal = ({ setUseModal, post }) => {
     if (!comment.trim()) return
     try {
       const res = await axiosInstance.post(
-        `${import.meta.env.VITE_DOMAIN}/api/comments/${post._id}`,
+        `/api/comments/${post._id}`,
         { text: comment },
         { withCredentials: true }
       )
@@ -70,7 +70,7 @@ const PostModal = ({ setUseModal, post }) => {
     try {
       if (isCurrentlyLiked) {
         const res = await axiosInstance.patch(
-          `${import.meta.env.VITE_DOMAIN}/api/comments/${post._id}/${commentId}/unlike`,
+          `/api/comments/${post._id}/${commentId}/unlike`,
           {},
           { withCredentials: true }
         )
@@ -83,7 +83,7 @@ const PostModal = ({ setUseModal, post }) => {
         )
       } else {
         const res = await axiosInstance.post(
-          `${import.meta.env.VITE_DOMAIN}/api/comments/${post._id}/${commentId}/like`,
+          `/api/comments/${post._id}/${commentId}/like`,
           {},
           { withCredentials: true }
         )
@@ -237,7 +237,7 @@ const PostModal = ({ setUseModal, post }) => {
                           <button onClick={() => {
                             async function replyCOmment()
                             {
-                                const res = await axiosInstance.post(import.meta.env.VITE_DOMAIN + `/api/comments/${post._id}/${item._id}/reply`, {text : replyText}, {withCredentials : true})
+                                const res = await axiosInstance.post( `/api/comments/${post._id}/${item._id}/reply`, {text : replyText}, {withCredentials : true})
                                 console.log(res)
                                 setReplyText("")
                                 const newCOmmentsArray = allComments.map((i) => {

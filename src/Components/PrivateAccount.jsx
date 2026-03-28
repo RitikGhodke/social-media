@@ -514,7 +514,7 @@ const PrivateAccount = ({ data, setData }) => {
     async function checkReqStatus() {
       try {
         const res = await axiosInstance.get(
-          import.meta.env.VITE_DOMAIN + `/api/follow-requests/check/${userId}`,
+           `/api/follow-requests/check/${userId}`,
           { withCredentials: true }
         )
         setIsReqSent(res.data.flag)
@@ -545,7 +545,7 @@ const PrivateAccount = ({ data, setData }) => {
       if (isFollowing) {
         // Unfollow karo
         const res = await axiosInstance.patch(
-          import.meta.env.VITE_DOMAIN + `/api/follow-requests/unfollow/${userId}`,
+           `/api/follow-requests/unfollow/${userId}`,
           {},
           { withCredentials: true }
         )
@@ -556,7 +556,7 @@ const PrivateAccount = ({ data, setData }) => {
       } else if (isReqSent) {
         // Request cancel karo
         await axiosInstance.delete(
-          import.meta.env.VITE_DOMAIN + `/api/follow-requests/${userId}`,
+           `/api/follow-requests/${userId}`,
           { withCredentials: true }
         )
         
@@ -565,7 +565,7 @@ const PrivateAccount = ({ data, setData }) => {
       } else {
         // Follow request bhejo
         await axiosInstance.post(
-          import.meta.env.VITE_DOMAIN + `/api/follow-requests/${userId}`,
+           `/api/follow-requests/${userId}`,
           {},
           { withCredentials: true }
         )

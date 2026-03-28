@@ -81,7 +81,7 @@ const ToggleSwitch = ({ label }) => {
   async function toggleAccount() {
     try {
       const res = await axiosInstance.patch(
-        `${import.meta.env.VITE_DOMAIN}/api/profile/${userData._id}/privacy`,
+        `/api/profile/${userData._id}/privacy`,
         { isPrivate: !isPrivate },
         { withCredentials: true }
       );

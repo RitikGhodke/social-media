@@ -12,7 +12,7 @@ const Chats = () => {
     async function getConversations() {
       try {
         const res = await axiosInstance.get(
-          import.meta.env.VITE_DOMAIN + `/api/chats`,
+            `/api/chats`,
           { withCredentials: true }
         )
         setConv(res.data.data)

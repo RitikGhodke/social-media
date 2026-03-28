@@ -616,7 +616,7 @@ const Profile = () => {
       const base64pic = await fileToBase64(compressedFile);
 
       const res = await axiosInstance.patch(
-        `${import.meta.env.VITE_DOMAIN}/api/profile/${userData?._id}/profile-picture`,
+        `/api/profile/${userData?._id}/profile-picture`,
         { profilePicture: base64pic },
         { withCredentials: true }
       );

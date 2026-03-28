@@ -156,7 +156,7 @@ const ProtectedRoutes = () => {
         console.log("🔍 Fetching user...")
 
         const res = await axiosInstance.get(
-          `${import.meta.env.VITE_DOMAIN}/api/auth/get-user-data`, // ✅ FIXED URL
+          `/api/auth/get-user-data`, // ✅ FIXED URL
           { withCredentials: true }
         )
 

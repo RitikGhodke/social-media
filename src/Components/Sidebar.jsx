@@ -13,7 +13,7 @@ const Sidebar = () => {
   function logout() {
     async function logOut() {
       await axiosInstance.post(
-        import.meta.env.VITE_DOMAIN + "/api/auth/logout",
+         "/api/auth/logout",
         {},
         { withCredentials: true }
       )

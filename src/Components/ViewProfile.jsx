@@ -188,7 +188,7 @@ const ViewProfile = () => {
         setLoading(true)
         
         const res = await axiosInstance.get(
-          import.meta.env.VITE_DOMAIN + `/api/profile/${userId}`,
+          `/api/profile/${userId}`,
           { withCredentials: true }
         )
         

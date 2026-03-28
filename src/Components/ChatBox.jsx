@@ -20,7 +20,7 @@ const ChatBox = () => {
     useEffect(() => {
         async function getChats()
         {
-            const res = await axiosInstance.get(import.meta.env.VITE_DOMAIN + `/api/chats/${id}`, {withCredentials : true})
+            const res = await axiosInstance.get( `/api/chats/${id}`, {withCredentials : true})
             console.log(res)
             setChats(res.data.chats)
         }
@@ -44,7 +44,7 @@ const ChatBox = () => {
 
     useEffect(() => {
         async function getProfile() {
-            const res = await axiosInstance.get(import.meta.env.VITE_DOMAIN + `/api/profile/${id}`, { withCredentials: true })
+            const res = await axiosInstance.get( `/api/profile/${id}`, { withCredentials: true })
             setUserData(res.data.data)
         }
         getProfile()

@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     async function getData()
     {
-      const res = await axiosInstance.get(import.meta.env.VITE_DOMAIN +  `/api/posts/feed`, {withCredentials : true})
+      const res = await axiosInstance.get(  `/api/posts/feed`, {withCredentials : true})
       // console.log(res)
       setPosts(res.data.data)
     }

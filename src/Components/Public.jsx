@@ -524,7 +524,7 @@ const Public = ({ data }) => {
       if (isFollowing) {
         // ✅ UNFOLLOW (correct route)
         const res = await axiosInstance.patch(
-          `${import.meta.env.VITE_DOMAIN}/api/follow-requests/unfollow/${userId}`,
+          `/api/follow-requests/unfollow/${userId}`,
           {},
           { withCredentials: true }
         )
@@ -536,7 +536,7 @@ const Public = ({ data }) => {
       } else {
         // ✅ FOLLOW (FIXED HERE 🔥)
         const res = await axiosInstance.post(
-          `${import.meta.env.VITE_DOMAIN}/api/follow-request/${userId}`,  // ✅ FIXED LINE
+          `/api/follow-request/${userId}`,  // ✅ FIXED LINE
           {},
           { withCredentials: true }
         )

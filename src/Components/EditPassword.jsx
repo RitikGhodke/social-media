@@ -21,7 +21,7 @@ const EditPassword = () => {
     }
     async function change() {
         try {
-        const res = await axiosInstance.patch(import.meta.env.VITE_DOMAIN + "/api/auth/change-password", {oldPassword, newPassword}, {withCredentials : true})
+        const res = await axiosInstance.patch( "/api/auth/change-password", {oldPassword, newPassword}, {withCredentials : true})
         toast.success("Password Changed Successfully")
         nav("/profile")
         } catch (error) {

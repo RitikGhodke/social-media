@@ -128,7 +128,7 @@ const Requests = () => {
     async function getData() {
       try {
         const res = await axiosInstance.get(
-          import.meta.env.VITE_DOMAIN + `/api/follow-requests`,
+           `/api/follow-requests`,
           { withCredentials: true }
         )
         setRequests(res.data.data)
@@ -142,7 +142,7 @@ const Requests = () => {
   const handleReview = async (itemId, status) => {
     try {
       await axiosInstance.post( // ✅ Backend mein POST hai, PATCH nahi!
-        import.meta.env.VITE_DOMAIN + `/api/follow-request/review/${itemId}/${status}`,
+        `/api/follow-request/review/${itemId}/${status}`,
         {},
         { withCredentials: true }
       )

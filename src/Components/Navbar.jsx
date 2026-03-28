@@ -22,7 +22,7 @@ const Navbar = () => {
     const intervalId = setTimeout(() => {
       async function getData()
       {
-        const res = await axiosInstance.get(import.meta.env.VITE_DOMAIN + `/api/follow-requests/search?q=${q}`, {withCredentials  : true})
+        const res = await axiosInstance.get( `/api/follow-requests/search?q=${q}`, {withCredentials  : true})
         // console.log(res)
         setSuggestions(res.data.data)
       }
