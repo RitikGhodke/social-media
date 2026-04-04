@@ -41,10 +41,15 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between px-4 md:px-8 py-3 bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50 h-[65px] md:h-[80px]">
       
-      {/* Logo */}
-      <h3 className="text-lg md:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 cursor-pointer whitespace-nowrap">
-        SocialApp
-      </h3>
+       {/* 🔥 NEXORA LOGO TEXT */}
+        <div className="flex justify-center mb-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-wider relative">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
+              Nexora
+            </span>
+            <span className="absolute inset-0 blur-xl opacity-30 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"></span>
+          </h1>
+        </div>
 
       {/* Search */}
       <div ref={dropdownRef} className="w-[45%] md:w-[50%] flex-col flex justify-center relative">
