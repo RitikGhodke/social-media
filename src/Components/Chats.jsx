@@ -194,6 +194,9 @@ const Chats = () => {
             }
         }
         getConversations()
+
+         const interval = setInterval(getConversations, 10000)
+    return () => clearInterval(interval)
     }, [])
 
     // ✅ Socket — conversation-updated suno
