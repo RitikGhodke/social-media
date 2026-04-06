@@ -1304,8 +1304,7 @@ const ChatBox = () => {
             socket.current.emit("join-room", { sender: myUserData._id, receiver: id })
         })
 
-        socket.current.emit("join-room", { sender: myUserData._id, receiver: id })
-
+        
         socket.current.on("receive-msg", (msg) => {
             // ✅ Fix 1: Apna hi message dobara add mat karo
             if (msg.sender?.toString() === myUserData._id?.toString()) return
