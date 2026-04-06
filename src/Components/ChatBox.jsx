@@ -1307,6 +1307,8 @@ const ChatBox = () => {
         socket.current.emit("join-room", { sender: myUserData._id, receiver: id })
 
         socket.current.on("receive-msg", (msg) => {
+            // ✅ Fix 1: Apna hi message dobara add mat karo
+            if (msg.sender?.toString() === myUserData._id?.toString()) return
             setChats(prev => [...prev, msg])
             setIsTyping(false)
         })
@@ -1339,7 +1341,6 @@ const ChatBox = () => {
         socket.current.emit("typing", { sender: myUserData._id, receiver: id })
     }
 
-    // ✅ Image compress + select
     async function handleImageSelect(e) {
         const file = e.target.files?.[0]
         if (!file) return
@@ -1410,7 +1411,6 @@ const ChatBox = () => {
         setShowReactions(null)
     }
 
-    // ✅ Swipe to reply
     function handleTouchStart(e, item) {
         setSwipeStart(prev => ({ ...prev, [item._id]: e.touches[0].clientX }))
     }
@@ -1434,7 +1434,6 @@ const ChatBox = () => {
         setSwipeStart(prev => ({ ...prev, [item._id]: 0 }))
     }
 
-    // ✅ Long press for reaction — mobile
     function handleLongPressStart(item) {
         const timer = setTimeout(() => {
             setShowReactions(item._id)
@@ -1471,8 +1470,8 @@ const ChatBox = () => {
 
                 <div className="flex-1 flex flex-col h-full">
 
-                    {/* ✅ Header — fixed, no up-down movement */}
-                    <div className="flex-shrink-0 flex items-center px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+                    {/* ✅ Fix 2 & 3: relative add kiya taaki theme picker sahi jagah aaye */}
+                    <div className="relative flex-shrink-0 flex items-center px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
                         <button onClick={() => nav("/chats")} className="md:hidden mr-3 text-gray-600 flex-shrink-0">
                             <ArrowLeft size={22} />
                         </button>
@@ -1510,7 +1509,7 @@ const ChatBox = () => {
                             )}
                         </div>
 
-                        {/* ✅ Theme button */}
+                        {/* Theme button */}
                         <button
                             onClick={(e) => { e.stopPropagation(); setShowThemes(!showThemes) }}
                             className="flex-shrink-0 ml-2 text-gray-500 hover:text-pink-500 transition text-lg"
@@ -1518,9 +1517,9 @@ const ChatBox = () => {
                             🎨
                         </button>
 
-                        {/* Theme picker */}
+                        {/* ✅ Theme picker — relative parent ki wajah se ab sahi position pe aayega */}
                         {showThemes && (
-                            <div className="absolute top-16 right-4 bg-white rounded-2xl shadow-xl border border-gray-100 p-3 z-50 flex gap-2 flex-wrap max-w-[250px]">
+                            <div className="absolute top-14 right-4 bg-white rounded-2xl shadow-xl border border-gray-100 p-3 z-50 flex gap-2 flex-wrap max-w-[250px]">
                                 {THEMES.map(theme => (
                                     <button
                                         key={theme.name}
@@ -1559,7 +1558,6 @@ const ChatBox = () => {
                                         </div>
                                     )}
 
-                                    {/* ✅ Swipe + Long press wrapper */}
                                     <div
                                         className={`flex ${isSender ? "justify-end" : "justify-start"} mb-2 group relative`}
                                         onTouchStart={(e) => {
@@ -1682,7 +1680,7 @@ const ChatBox = () => {
                                             )}
                                         </div>
 
-                                        {/* ✅ Mobile reaction popup — long press se */}
+                                        {/* Mobile reaction popup — long press */}
                                         {showReactions === item._id && (
                                             <div
                                                 className={`absolute ${isSender ? "right-10" : "left-10"} bottom-8 bg-white rounded-full shadow-lg border border-gray-100 px-2 py-1 flex gap-1 z-50 md:hidden`}

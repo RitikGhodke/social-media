@@ -166,13 +166,13 @@ const ConvCard = ({ data, myId, onDelete }) => {
                                     {unreadCount > 9 ? "9+" : unreadCount}
                                 </span>
                             )}
-                            {/* ✅ Delete button */}
+                            {/* ✅ Fix: Conflicting opacity classes hata diye */}
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     setShowDeleteConfirm(true)
                                 }}
-                                className="opacity-0 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 opacity-100 text-gray-400 hover:text-red-500 transition p-1"
+                                className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition p-1"
                             >
                                 <Trash2 size={16} />
                             </button>
@@ -184,7 +184,7 @@ const ConvCard = ({ data, myId, onDelete }) => {
                 </div>
             </div>
 
-            {/* ✅ Delete Confirm Modal */}
+            {/* Delete Confirm Modal */}
             {showDeleteConfirm && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl p-6 w-full max-w-sm text-center shadow-xl">
