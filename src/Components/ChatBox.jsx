@@ -248,7 +248,8 @@ const ChatBox = () => {
                 <div className="flex-1 flex flex-col h-full">
 
                     {/* ✅ Fix 2 & 3: relative add kiya taaki theme picker sahi jagah aaye */}
-                    <div className="relative flex-shrink-0 flex items-center px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+                    {/* <div className="relative flex-shrink-0 flex items-center px-4 py-3 bg-white border-b border-gray-200 shadow-sm"> */}
+                    <div className="relative flex-shrink-0 flex items-center px-4 bg-white border-b border-gray-200 shadow-sm" style={{height: "64px"}}>
                         <button onClick={() => nav("/chats")} className="md:hidden mr-3 text-gray-600 flex-shrink-0">
                             <ArrowLeft size={22} />
                         </button>
@@ -270,9 +271,9 @@ const ChatBox = () => {
                                         <p className="font-semibold text-gray-800 text-sm truncate">
                                             {userData.firstName} {userData.lastName}
                                         </p>
-                                        <p className="text-green-500 text-xs">
-                                            {isTyping ? "typing..." : "Online"}
-                                        </p>
+                                        <p className={`text-xs ${isTyping ? "text-green-500" : "text-gray-400"}`}>
+                                              {isTyping ? "typing..." : ""}
+                                           </p>
                                     </div>
                                 </>
                             ) : (
@@ -357,7 +358,8 @@ const ChatBox = () => {
                                         {!isSender && (
                                             <img
                                                 src={userData?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-                                                className="w-7 h-7 rounded-full object-cover mr-2 self-end flex-shrink-0"
+                                                 className="w-8 h-8 rounded-full object-cover mr-3 self-end flex-shrink-0" 
+                                                
                                             />
                                         )}
 
@@ -388,7 +390,7 @@ const ChatBox = () => {
 
                                             {/* Text */}
                                             {item.text && (
-                                                <div className={`px-4 py-2 rounded-2xl text-sm break-words shadow-sm
+                                                <div className={`px-4 py-2.5 rounded-2xl text-base break-words shadow-sm
                                                     ${isSender
                                                         ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-br-none"
                                                         : "bg-white text-gray-800 rounded-bl-none"
@@ -478,7 +480,7 @@ const ChatBox = () => {
                                         {isSender && (
                                             <img
                                                 src={myUserData?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-                                                className="w-7 h-7 rounded-full object-cover ml-2 self-end flex-shrink-0"
+                                                 className="w-8 h-8 rounded-full object-cover ml-3 self-end flex-shrink-0" 
                                             />
                                         )}
                                     </div>
