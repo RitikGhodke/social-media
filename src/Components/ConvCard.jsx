@@ -172,7 +172,8 @@ const ConvCard = ({ data, myId, onDelete }) => {
                                     e.stopPropagation()
                                     setShowDeleteConfirm(true)
                                 }}
-                                className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition p-1"
+                                // className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition p-1"
+                                 className="text-gray-400 hover:text-red-500 transition p-1 opacity-100"
                             >
                                 <Trash2 size={16} />
                             </button>
