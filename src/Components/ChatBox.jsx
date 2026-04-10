@@ -639,7 +639,7 @@ const ChatBox = () => {
     const [swipeStart, setSwipeStart] = useState({})
     const [showThemes, setShowThemes] = useState(false)
     const [currentTheme, setCurrentTheme] = useState(THEMES[0])
-    const [longPressTimer, setLongPressTimer] = useState(null)
+    const longPressTimer = useRef(null)
     const myUserData = useSelector(store => store.user)
     const nav = useNavigate()
     const messagesEndRef = useRef(null)
@@ -791,9 +791,13 @@ const ChatBox = () => {
 
     function handleTouchStart(e, item) {
         setSwipeStart(prev => ({ ...prev, [item._id]: e.touches[0].clientX }))
+        longPressTimer.current = setTimeout(() => {
+            setShowReactions(item._id)
+        }, 500)
     }
 
     function handleTouchMove(e, item) {
+        clearTimeout(longPressTimer.current)
         const startX = swipeStart[item._id]
         if (!startX) return
         const diff = e.touches[0].clientX - startX
@@ -806,21 +810,11 @@ const ChatBox = () => {
     }
 
     function handleTouchEnd(e, item) {
+        clearTimeout(longPressTimer.current)
         const swipe = swipeX[item._id] || 0
         if (Math.abs(swipe) > 40) setReplyingTo(item)
         setSwipeX(prev => ({ ...prev, [item._id]: 0 }))
         setSwipeStart(prev => ({ ...prev, [item._id]: 0 }))
-    }
-
-    function handleLongPressStart(item) {
-        const timer = setTimeout(() => {
-            setShowReactions(item._id)
-        }, 500)
-        setLongPressTimer(timer)
-    }
-
-    function handleLongPressEnd() {
-        clearTimeout(longPressTimer)
     }
 
     function formatTime(dateStr) {
@@ -840,51 +834,61 @@ const ChatBox = () => {
     }
 
     return (
-        <div className="h-screen flex flex-col bg-gray-100 overflow-hidden">
+        <div className="h-screen flex flex-col overflow-hidden">
             <div className="hidden md:block"><Navbar /></div>
 
             <div className="flex flex-1 overflow-hidden">
                 <div className="hidden md:block"><Sidebar /></div>
 
-                <div className="flex-1 flex flex-col h-full">
+                <div className="flex-1 flex flex-col h-full min-h-0">
 
-                    {/* ✅ Header — fixed 64px height, kabhi upar neeche nahi hoga */}
+                    {/* ✅ Header — Instagram style, fixed height, no movement */}
                     <div
-                        className="relative flex-shrink-0 flex items-center px-4 bg-white border-b border-gray-200 shadow-sm"
-                        style={{ height: "64px", minHeight: "64px", maxHeight: "64px" }}
+                        className="relative flex-shrink-0 flex items-center gap-2 px-3 bg-white border-b border-gray-200 shadow-sm"
+                        style={{ height: "60px", minHeight: "60px" }}
                     >
-                        <button onClick={() => nav("/chats")} className="md:hidden mr-3 text-gray-600 flex-shrink-0">
+                        {/* Back button */}
+                        <button
+                            onClick={() => nav("/chats")}
+                            className="md:hidden text-gray-700 flex-shrink-0 p-1"
+                        >
                             <ArrowLeft size={22} />
                         </button>
 
+                        {/* ✅ User info — fixed, won't move */}
                         <div
                             onClick={() => nav("/profile/view/" + id)}
-                            className="flex items-center gap-3 flex-1 cursor-pointer min-w-0"
+                            className="flex items-center gap-2 flex-1 cursor-pointer min-w-0"
                         >
                             {userData ? (
                                 <>
+                                    {/* DP with online dot */}
                                     <div className="relative flex-shrink-0">
                                         <img
-                                            className="w-10 h-10 rounded-full object-cover ring-2 ring-pink-300"
+                                            className="w-9 h-9 rounded-full object-cover"
                                             src={userData.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                                         />
-                                        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white"></span>
+                                        {/* ✅ Online green dot */}
+                                        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
                                     </div>
-                                    <div className="min-w-0">
-                                        <p className="font-semibold text-gray-800 text-sm truncate">
+
+                                    {/* Name + status */}
+                                    <div className="min-w-0 flex-1">
+                                        <p className="font-semibold text-gray-900 text-[15px] leading-tight truncate">
                                             {userData.firstName} {userData.lastName}
                                         </p>
-                                        <p className={`text-xs ${isTyping ? "text-green-500" : "text-gray-400"}`}>
-                                            {isTyping ? "typing..." : ""}
+                                        {/* ✅ Online / typing — always shows */}
+                                        <p className="text-[12px] leading-tight text-green-500 font-medium">
+                                            {isTyping ? "typing..." : "Online"}
                                         </p>
                                     </div>
                                 </>
                             ) : (
-                                <div className="flex items-center gap-3 w-full animate-pulse">
-                                    <div className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0"></div>
-                                    <div className="space-y-1 flex-1 min-w-0">
-                                        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-                                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                <div className="flex items-center gap-2 w-full animate-pulse">
+                                    <div className="w-9 h-9 bg-gray-200 rounded-full flex-shrink-0"></div>
+                                    <div className="flex-1 min-w-0 space-y-1">
+                                        <div className="h-3.5 bg-gray-200 rounded w-2/3"></div>
+                                        <div className="h-3 bg-gray-100 rounded w-1/3"></div>
                                     </div>
                                 </div>
                             )}
@@ -893,13 +897,14 @@ const ChatBox = () => {
                         {/* Theme button */}
                         <button
                             onClick={(e) => { e.stopPropagation(); setShowThemes(!showThemes) }}
-                            className="flex-shrink-0 ml-2 text-gray-500 hover:text-pink-500 transition text-lg"
+                            className="flex-shrink-0 text-gray-500 text-lg p-1"
                         >
                             🎨
                         </button>
 
+                        {/* Theme picker */}
                         {showThemes && (
-                            <div className="absolute top-14 right-4 bg-white rounded-2xl shadow-xl border border-gray-100 p-3 z-50 flex gap-2 flex-wrap max-w-[250px]">
+                            <div className="absolute top-[62px] right-2 bg-white rounded-2xl shadow-xl border border-gray-100 p-3 z-50 flex gap-2 flex-wrap max-w-[240px]">
                                 {THEMES.map(theme => (
                                     <button
                                         key={theme.name}
@@ -913,9 +918,9 @@ const ChatBox = () => {
                         )}
                     </div>
 
-                    {/* Messages */}
+                    {/* Messages area */}
                     <div
-                        className="flex-1 overflow-y-auto px-4 py-4 space-y-1"
+                        className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5 min-h-0"
                         style={{
                             background: currentTheme.bg,
                             backgroundSize: currentTheme.size || "auto"
@@ -930,54 +935,48 @@ const ChatBox = () => {
 
                             return (
                                 <div key={item._id || index}>
+                                    {/* Date separator */}
                                     {showDate && item.createdAt && (
                                         <div className="flex justify-center my-3">
-                                            <span className="bg-white/80 text-gray-500 text-xs px-3 py-1 rounded-full shadow-sm">
+                                            <span className="bg-white/90 text-gray-500 text-[11px] px-3 py-1 rounded-full shadow-sm font-medium">
                                                 {formatDate(item.createdAt)}
                                             </span>
                                         </div>
                                     )}
 
                                     <div
-                                        className={`flex ${isSender ? "justify-end" : "justify-start"} mb-2 group relative items-end`}
-                                        onTouchStart={(e) => {
-                                            handleTouchStart(e, item)
-                                            handleLongPressStart(item)
-                                        }}
-                                        onTouchMove={(e) => {
-                                            handleTouchMove(e, item)
-                                            handleLongPressEnd()
-                                        }}
-                                        onTouchEnd={(e) => {
-                                            handleTouchEnd(e, item)
-                                            handleLongPressEnd()
-                                        }}
+                                        className={`flex ${isSender ? "justify-end" : "justify-start"} mb-1 group relative`}
+                                        onTouchStart={(e) => handleTouchStart(e, item)}
+                                        onTouchMove={(e) => handleTouchMove(e, item)}
+                                        onTouchEnd={(e) => handleTouchEnd(e, item)}
                                         style={{
                                             transform: `translateX(${swipeOffset}px)`,
                                             transition: swipeOffset === 0 ? "transform 0.3s ease" : "none"
                                         }}
                                     >
-                                        {/* ✅ Receiver dp — equal gap */}
+                                        {/* ✅ Receiver dp — gap kam kiya */}
                                         {!isSender && (
                                             <img
                                                 src={userData?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-                                                className="w-8 h-8 rounded-full object-cover mr-2 flex-shrink-0"
+                                                className="w-8 h-8 rounded-full object-cover mr-1.5 self-end flex-shrink-0 mb-0.5"
                                             />
                                         )}
 
-                                        <div className="max-w-[70%] md:max-w-sm">
+                                        {/* ✅ Message bubble — Instagram size */}
+                                        <div className="max-w-[75%] md:max-w-md">
+
                                             {/* Reply preview */}
                                             {item.replyTo && (
-                                                <div className={`text-xs px-3 py-1.5 rounded-xl mb-1 border-l-4 
+                                                <div className={`text-xs px-3 py-1.5 rounded-xl mb-1 border-l-4
                                                     ${isSender
                                                         ? "bg-purple-100 border-purple-400 text-purple-700"
                                                         : "bg-gray-100 border-gray-400 text-gray-600"
                                                     }`}
                                                 >
-                                                    <p className="font-semibold mb-0.5">
+                                                    <p className="font-semibold mb-0.5 text-[11px]">
                                                         {item.replyTo.sender?.toString() === myUserData._id?.toString() ? "You" : userData?.firstName}
                                                     </p>
-                                                    <p className="truncate">{item.replyTo.text || "📷 Photo"}</p>
+                                                    <p className="truncate text-[11px]">{item.replyTo.text || "📷 Photo"}</p>
                                                 </div>
                                             )}
 
@@ -985,24 +984,24 @@ const ChatBox = () => {
                                             {item.image && (
                                                 <img
                                                     src={item.image}
-                                                    className="rounded-2xl max-w-full max-h-60 object-cover shadow-md mb-1 cursor-pointer"
+                                                    className="rounded-2xl max-w-full max-h-72 object-cover shadow-md mb-0.5 cursor-pointer"
                                                     onClick={() => window.open(item.image, "_blank")}
                                                 />
                                             )}
 
-                                            {/* ✅ Text — bada aur spacing sahi */}
+                                            {/* ✅ Text — Instagram size (16px) */}
                                             {item.text && (
-                                                <div className={`px-4 py-2.5 rounded-2xl text-base break-words shadow-sm
+                                                <div className={`px-4 py-2.5 rounded-[20px] text-[15px] leading-[1.4] break-words shadow-sm
                                                     ${isSender
-                                                        ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-br-none"
-                                                        : "bg-white text-gray-800 rounded-bl-none"
+                                                        ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-br-sm"
+                                                        : "bg-white text-gray-900 rounded-bl-sm"
                                                     }`}
                                                 >
                                                     {item.text}
                                                 </div>
                                             )}
 
-                                            {/* Reactions display */}
+                                            {/* Reactions */}
                                             {item.reactions?.length > 0 && (
                                                 <div className={`flex flex-wrap gap-1 mt-1 ${isSender ? "justify-end" : "justify-start"}`}>
                                                     {Object.entries(
@@ -1018,18 +1017,19 @@ const ChatBox = () => {
                                                 </div>
                                             )}
 
-                                            <p className={`text-[10px] text-gray-400 mt-0.5 ${isSender ? "text-right" : "text-left"}`}>
+                                            {/* Timestamp */}
+                                            <p className={`text-[10px] mt-0.5 ${isSender ? "text-right text-gray-400" : "text-left text-gray-400"}`}>
                                                 {formatTime(item.createdAt)}
                                             </p>
                                         </div>
 
                                         {/* Desktop action buttons */}
-                                        <div className="flex items-center gap-1 mx-2 opacity-0 group-hover:opacity-100 transition self-center relative">
+                                        <div className="flex items-center gap-1 mx-1.5 opacity-0 group-hover:opacity-100 transition self-center relative">
                                             <button
                                                 onClick={() => setReplyingTo(item)}
                                                 className="text-gray-400 hover:text-pink-500 transition"
                                             >
-                                                <Reply size={16} />
+                                                <Reply size={15} />
                                             </button>
 
                                             <button
@@ -1042,17 +1042,16 @@ const ChatBox = () => {
                                                 😊
                                             </button>
 
-                                            {/* Reaction popup */}
                                             {showReactions === (item._id || index) && (
                                                 <div
-                                                    className="absolute bottom-8 left-0 bg-white rounded-full shadow-lg border border-gray-100 px-2 py-1 flex gap-1 z-50"
+                                                    className="absolute bottom-8 left-0 bg-white rounded-full shadow-lg border border-gray-100 px-2 py-1.5 flex gap-1.5 z-50"
                                                     onClick={e => e.stopPropagation()}
                                                 >
                                                     {REACTIONS.map(emoji => (
                                                         <button
                                                             key={emoji}
                                                             onClick={() => handleReact(item._id, emoji)}
-                                                            className="text-lg hover:scale-125 transition-transform"
+                                                            className="text-xl hover:scale-125 transition-transform"
                                                         >
                                                             {emoji}
                                                         </button>
@@ -1061,17 +1060,17 @@ const ChatBox = () => {
                                             )}
                                         </div>
 
-                                        {/* Mobile reaction popup — long press */}
+                                        {/* Mobile reaction popup */}
                                         {showReactions === item._id && (
                                             <div
-                                                className={`absolute ${isSender ? "right-10" : "left-10"} bottom-8 bg-white rounded-full shadow-lg border border-gray-100 px-2 py-1 flex gap-1 z-50 md:hidden`}
+                                                className={`absolute ${isSender ? "right-10" : "left-10"} bottom-8 bg-white rounded-full shadow-lg border border-gray-100 px-2 py-1.5 flex gap-1.5 z-50 md:hidden`}
                                                 onClick={e => e.stopPropagation()}
                                             >
                                                 {REACTIONS.map(emoji => (
                                                     <button
                                                         key={emoji}
                                                         onClick={() => handleReact(item._id, emoji)}
-                                                        className="text-lg"
+                                                        className="text-xl"
                                                     >
                                                         {emoji}
                                                     </button>
@@ -1079,19 +1078,19 @@ const ChatBox = () => {
                                             </div>
                                         )}
 
-                                        {/* ✅ Sender dp — equal gap */}
+                                        {/* ✅ Sender dp — gap kam kiya */}
                                         {isSender && (
                                             <img
                                                 src={myUserData?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-                                                className="w-8 h-8 rounded-full object-cover ml-2 flex-shrink-0"
+                                                className="w-8 h-8 rounded-full object-cover ml-1.5 self-end flex-shrink-0 mb-0.5"
                                             />
                                         )}
                                     </div>
 
                                     {/* Swipe indicator */}
                                     {Math.abs(swipeOffset) > 30 && (
-                                        <div className={`flex ${isSender ? "justify-end mr-10" : "justify-start ml-10"} -mt-1 mb-1`}>
-                                            <span className="text-xs text-purple-500 font-medium">↩ Reply</span>
+                                        <div className={`flex ${isSender ? "justify-end mr-12" : "justify-start ml-12"} -mt-0.5 mb-1`}>
+                                            <span className="text-[11px] text-purple-500 font-medium">↩ Reply</span>
                                         </div>
                                     )}
                                 </div>
@@ -1100,12 +1099,12 @@ const ChatBox = () => {
 
                         {/* Typing indicator */}
                         {isTyping && (
-                            <div className="flex justify-start mb-1 items-end">
+                            <div className="flex justify-start mb-1 items-end gap-1.5">
                                 <img
                                     src={userData?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-                                    className="w-8 h-8 rounded-full object-cover mr-2 flex-shrink-0"
+                                    className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                                 />
-                                <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-none shadow-sm flex gap-1 items-center">
+                                <div className="bg-white px-4 py-3 rounded-[20px] rounded-bl-sm shadow-sm flex gap-1 items-center">
                                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></span>
                                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></span>
                                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></span>
@@ -1152,38 +1151,59 @@ const ChatBox = () => {
 
                     {/* Emoji Picker */}
                     {showEmoji && (
-                        <div className="absolute bottom-20 left-4 z-50" onClick={e => e.stopPropagation()}>
+                        <div className="absolute bottom-20 left-2 z-50" onClick={e => e.stopPropagation()}>
                             <EmojiPicker
                                 onEmojiClick={(e) => setText(prev => prev + e.emoji)}
-                                height={350}
-                                width={300}
+                                height={320}
+                                width={280}
                             />
                         </div>
                     )}
 
-                    {/* Input */}
-                    <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200 flex items-center gap-2">
-                        <button onClick={() => setShowEmoji(!showEmoji)} className="text-gray-400 hover:text-pink-500 transition flex-shrink-0">
-                            <Smile size={22} />
+                    {/* ✅ Input — password suggest band, clean */}
+                    <div className="flex-shrink-0 px-2 py-2 bg-gray-100 border-t border-gray-200 flex items-center gap-1.5">
+                        <button
+                            onClick={() => setShowEmoji(!showEmoji)}
+                            className="text-gray-500 flex-shrink-0 p-1"
+                        >
+                            <Smile size={24} />
                         </button>
-                        <button onClick={() => imageInputRef.current?.click()} className="text-gray-400 hover:text-pink-500 transition flex-shrink-0">
-                            <ImagePlus size={22} />
+
+                        <button
+                            onClick={() => imageInputRef.current?.click()}
+                            className="text-gray-500 flex-shrink-0 p-1"
+                        >
+                            <ImagePlus size={24} />
                         </button>
-                        <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageSelect} />
+
+                        <input
+                            ref={imageInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageSelect}
+                        />
+
+                        {/* ✅ autocomplete off — password suggest band */}
                         <input
                             type="text"
-                            placeholder="Type a message..."
+                            placeholder="Message..."
                             value={text}
                             onChange={handleTyping}
                             onKeyDown={handleKeyDown}
-                            className="flex-1 px-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-300 text-sm"
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                            className="flex-1 px-4 py-2.5 bg-white rounded-full focus:outline-none text-[15px] shadow-sm"
                         />
+
                         <button
                             onClick={btnClickHandler}
                             disabled={!text.trim() && !imageBase64}
-                            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white p-2.5 rounded-full hover:opacity-90 transition disabled:opacity-40 flex-shrink-0"
+                            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white p-2.5 rounded-full hover:opacity-90 transition disabled:opacity-40 flex-shrink-0 shadow-sm"
                         >
-                            <Send size={18} />
+                            <Send size={19} />
                         </button>
                     </div>
                 </div>
