@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
-import { ImagePlus, X, Type, AlignCenter, AlignTop, AlignBottom } from 'lucide-react'
+import { ImagePlus, X, Type } from 'lucide-react'
 import imageCompression from 'browser-image-compression'
 import toast from 'react-hot-toast'
 
@@ -160,26 +160,26 @@ const AddStory = () => {
 
                                         {/* Text position */}
                                         <div>
-                                            <p className="text-xs text-gray-500 mb-2">Text Position</p>
-                                            <div className="flex gap-2">
-                                                {[
-                                                    { value: "top", icon: <AlignTop size={16} />, label: "Top" },
-                                                    { value: "center", icon: <AlignCenter size={16} />, label: "Center" },
-                                                    { value: "bottom", icon: <AlignBottom size={16} />, label: "Bottom" },
-                                                ].map(pos => (
-                                                    <button
-                                                        key={pos.value}
-                                                        onClick={() => setTextPosition(pos.value)}
-                                                        className={`flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border text-xs font-medium transition ${textPosition === pos.value
-                                                            ? "border-purple-400 bg-purple-50 text-purple-600"
-                                                            : "border-gray-200 text-gray-500"
-                                                            }`}
-                                                    >
-                                                        {pos.icon} {pos.label}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
+    <p className="text-xs text-gray-500 mb-2">Text Position</p>
+    <div className="flex gap-2">
+        {[
+            { value: "top", label: "⬆ Top" },
+            { value: "center", label: "⬛ Center" },
+            { value: "bottom", label: "⬇ Bottom" },
+        ].map(pos => (
+            <button
+                key={pos.value}
+                onClick={() => setTextPosition(pos.value)}
+                className={`flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border text-xs font-medium transition ${textPosition === pos.value
+                    ? "border-purple-400 bg-purple-50 text-purple-600"
+                    : "border-gray-200 text-gray-500"
+                    }`}
+            >
+                {pos.label}
+            </button>
+        ))}
+    </div>
+</div>
                                     </>
                                 )}
                             </div>
