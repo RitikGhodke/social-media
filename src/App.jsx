@@ -72,7 +72,8 @@ const App = () => {
             <Route path='/add' element={<NewPost />} />
             <Route path='/review-requests' element={<Requests />} />
             <Route path="/notifications" element={<Notifications />} />
-            <Route path="/add-Story" element={<AddStory />} />
+            <Route path="/add-story" element={<AddStory />} />
+            
           </Route>
         </Routes>
       </div>

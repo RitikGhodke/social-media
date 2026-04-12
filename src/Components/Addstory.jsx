@@ -78,7 +78,6 @@ const AddStory = () => {
                                 <>
                                     <img src={selectedImage} alt="preview" className="w-full h-full object-cover" />
 
-                                    {/* Text overlay preview */}
                                     {text && (
                                         <div className={`absolute left-4 right-4 ${textPosition === "top"
                                             ? "top-16"
@@ -95,9 +94,12 @@ const AddStory = () => {
                                         </div>
                                     )}
 
-                                    {/* Remove image */}
                                     <button
-                                        onClick={(e) => { e.stopPropagation(); setSelectedImage(null); setImageBase64("") }}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            setSelectedImage(null)
+                                            setImageBase64("")
+                                        }}
                                         className="absolute top-3 right-3 bg-black/50 text-white rounded-full p-1"
                                     >
                                         <X size={18} />
@@ -119,11 +121,9 @@ const AddStory = () => {
                             onChange={handleImageSelect}
                         />
 
-                        {/* Controls */}
                         {selectedImage && (
                             <div className="bg-white rounded-2xl p-4 space-y-4 mb-4 shadow-sm">
 
-                                {/* Text toggle */}
                                 <button
                                     onClick={() => setShowTextInput(!showTextInput)}
                                     className="flex items-center gap-2 text-sm font-medium text-purple-600"
@@ -134,7 +134,6 @@ const AddStory = () => {
 
                                 {showTextInput && (
                                     <>
-                                        {/* Text input */}
                                         <input
                                             type="text"
                                             value={text}
@@ -143,7 +142,6 @@ const AddStory = () => {
                                             className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
                                         />
 
-                                        {/* Text color */}
                                         <div>
                                             <p className="text-xs text-gray-500 mb-2">Text Color</p>
                                             <div className="flex gap-2">
@@ -158,34 +156,32 @@ const AddStory = () => {
                                             </div>
                                         </div>
 
-                                        {/* Text position */}
                                         <div>
-    <p className="text-xs text-gray-500 mb-2">Text Position</p>
-    <div className="flex gap-2">
-        {[
-            { value: "top", label: "⬆ Top" },
-            { value: "center", label: "⬛ Center" },
-            { value: "bottom", label: "⬇ Bottom" },
-        ].map(pos => (
-            <button
-                key={pos.value}
-                onClick={() => setTextPosition(pos.value)}
-                className={`flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border text-xs font-medium transition ${textPosition === pos.value
-                    ? "border-purple-400 bg-purple-50 text-purple-600"
-                    : "border-gray-200 text-gray-500"
-                    }`}
-            >
-                {pos.label}
-            </button>
-        ))}
-    </div>
-</div>
+                                            <p className="text-xs text-gray-500 mb-2">Text Position</p>
+                                            <div className="flex gap-2">
+                                                {[
+                                                    { value: "top", label: "⬆ Top" },
+                                                    { value: "center", label: "⬛ Center" },
+                                                    { value: "bottom", label: "⬇ Bottom" },
+                                                ].map(pos => (
+                                                    <button
+                                                        key={pos.value}
+                                                        onClick={() => setTextPosition(pos.value)}
+                                                        className={`flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border text-xs font-medium transition ${textPosition === pos.value
+                                                            ? "border-purple-400 bg-purple-50 text-purple-600"
+                                                            : "border-gray-200 text-gray-500"
+                                                            }`}
+                                                    >
+                                                        {pos.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </>
                                 )}
                             </div>
                         )}
 
-                        {/* Post button */}
                         <button
                             onClick={handlePost}
                             disabled={!imageBase64 || loading}
