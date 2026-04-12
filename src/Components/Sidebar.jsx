@@ -518,7 +518,7 @@ const Sidebar = () => {
           </Link>
 
           {/* ✅ Notifications with badge */}
-          <Link to="/notifications" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/60 hover:shadow-md transition">
+          {/* <Link to="/notifications" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/60 hover:shadow-md transition">
             <div className="relative">
               <i className="fa-solid fa-bell"></i>
               {unreadCount > 0 && (
@@ -528,7 +528,7 @@ const Sidebar = () => {
               )}
             </div>
             {showSidebar && <span>Notifications</span>}
-          </Link>
+          </Link> */}
 
         </nav>
 
@@ -569,7 +569,7 @@ const Sidebar = () => {
         </Link>
 
         {/* ✅ Notifications with badge — Mobile */}
-        <Link to="/notifications" className="flex flex-col items-center text-gray-600 hover:text-pink-500 transition">
+        {/* <Link to="/notifications" className="flex flex-col items-center text-gray-600 hover:text-pink-500 transition">
           <div className="relative">
             <i className="fa-solid fa-bell text-xl"></i>
             {unreadCount > 0 && (
@@ -579,7 +579,7 @@ const Sidebar = () => {
             )}
           </div>
           <span className="text-[10px] mt-0.5">Alerts</span>
-        </Link>
+        </Link> */}
 
         <Link to="/review-requests" className="flex flex-col items-center text-gray-600 hover:text-pink-500 transition">
           <i className="fa-solid fa-user-group text-xl"></i>
