@@ -16,7 +16,7 @@ import EditPassword from './Components/EditPassword'
 import ViewProfile from './Components/ViewProfile'
 import Requests from './Components/Requests'
 import Notifications from './Components/Notification'
-import AddStory from './Components/AddStory'
+import AddStory from './Components/Addstory'
 
 export const uiContext = createContext()
 
