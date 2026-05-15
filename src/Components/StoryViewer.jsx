@@ -454,7 +454,7 @@ const StoryViewer = ({ group, initialIndex, onClose, onStoryViewed }) => {
                             className="w-full h-full object-cover"
                             autoPlay
                             playsInline
-                            muted={false}
+                            // muted={false}
                             loop={false}
                         />
                     ) : (
